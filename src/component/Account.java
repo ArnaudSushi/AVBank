@@ -47,4 +47,11 @@ public abstract class Account {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+	
+	public String toString() {
+		return ("Account n°" + String.valueOf(this.accountId)
+				+ ", "+ this.label
+				+ ", balance : " + String.valueOf(this.balance)
+				+ ", client : " + this.client);
+	}
 }
