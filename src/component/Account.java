@@ -4,16 +4,16 @@ package component;
 public abstract class Account {
 	
 	protected String label;
-	protected int balance;
-	protected int accountId;
-	protected static int accountNumber;
+	protected double balance;
+	protected int accountNumber;
+	protected static int totalAccountNumber;
 	protected Client client;
 	
 	public Account(String label, Client client) {
-		accountNumber++;
+		totalAccountNumber++;
 		this.label = label;
 		this.client = client;
-		this.accountId = accountNumber;
+		this.accountNumber = totalAccountNumber;
 	}
 
 	public String getLabel() {
@@ -24,20 +24,23 @@ public abstract class Account {
 		this.label = label;
 	}
 
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(int amount) {
-		this.balance = amount;
+	public void setBalance(Flow flow) {
 	}
 
-	public int getAccountId() {
-		return accountId;
+	public int getAccountNumber() {
+		return accountNumber;
 	}
 
-	public void setAccountId(int accountId) {
-		this.accountId = accountId;
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public static int getTotalAccountNumber() {
+		return totalAccountNumber;
 	}
 
 	public Client getClient() {
@@ -49,7 +52,7 @@ public abstract class Account {
 	}
 	
 	public String toString() {
-		return ("Account n°" + String.valueOf(this.accountId)
+		return ("Account n°" + String.valueOf(this.accountNumber)
 				+ ", "+ this.label
 				+ ", balance : " + String.valueOf(this.balance)
 				+ ", client : " + this.client);

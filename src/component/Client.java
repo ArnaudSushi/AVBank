@@ -1,6 +1,7 @@
 package component;
 // 1.1.1 Creation of the Client class
 public class Client {
+	
 	private int clientId;
 	private String name;
 	private String firstName;
