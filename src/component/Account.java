@@ -29,6 +29,25 @@ public abstract class Account {
 	}
 
 	public void setBalance(Flow flow) {
+		//1.3.5 Updating accounts
+		switch (flow.getClass().getSimpleName().toString()) {
+		case "Debit":
+			this.balance -= flow.getAmount();
+			break;
+		case "Credit":
+			this.balance += flow.getAmount();
+			break;
+		case "Transfert":
+			Transfert trans = (Transfert) flow;
+			if (trans.getTargetAccountNumber() == this.accountNumber) {
+				this.balance += trans.getAmount();
+			} else if (trans.getIssuingAccountNumber() == this.accountNumber) {
+				this.balance -= trans.getAmount();
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	public int getAccountNumber() {
@@ -56,5 +75,9 @@ public abstract class Account {
 				+ ", "+ this.label
 				+ ", balance : " + String.valueOf(this.balance)
 				+ ", client : " + this.client);
+	}
+
+	public double compareByBalanceTo(Account account) {
+		return this.balance - account.getBalance();
 	}
 }
