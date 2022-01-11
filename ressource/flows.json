@@ -1,59 +1,68 @@
 {
-	"Debit": {
+	"flows" : [
+	{
 		"comment" : "Debit",
 		"amount" : 50.00,
 		"targetAccountNumber" : 1,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 1,
 	},
-	"Credit": {
+	{
 		"comment" : "Credit",
 		"amount" : 100.50,
 		"targetAccountNumber" : 1,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 2,
 	},
-	"Credit": {
+	{
 		"comment" : "Credit",
 		"amount" : 100.50,
 		"targetAccountNumber" : 3,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 3,
 	},
-	"Credit": {,
+	{,
 		"comment" : "Credit",
 		"amount" : 100.50,
 		"targetAccountNumber" : 5,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 4,
 	},
-	"Credit": {
+	{
 		"comment" : "Credit",
 		"amount" : 1500.00,
 		"targetAccountNumber" : 2,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 5,
 	},
-	"Credit": {
+	{
 		"comment" : "Credit",
 		"amount" : 1500.00,
 		"targetAccountNumber" : 4,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 6,
 	},
-	"Credit": {
+	{
 		"comment" : "Credit",
 		"amount" : 1500.00,
 		"targetAccountNumber" : 6,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 7,
 	},
-	"Transfert": {
+	{
 		"comment" : "Transfert",
 		"amount" : 50.00,
 		"issuingAccountNumber" : 1,
 		"targetAccountNumber" : 2,
 		"effet" : false,
 		"date" : "2022-01-11",
+		"id" : 8,
 	}
-}
+]}

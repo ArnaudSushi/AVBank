@@ -4,7 +4,7 @@ package component;
 public abstract class Account {
 	
 	protected String label;
-	protected double balance;
+	protected double balance = 0;
 	protected int accountNumber;
 	protected static int totalAccountNumber;
 	protected Client client;

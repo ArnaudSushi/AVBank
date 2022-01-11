@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accounts>
+<account>
+<label>Current account</label>
+<client>1</client>
+</account>
+<account>
+<label>Savings account</label>
+<client>1</client>
+</account>
+<account>
+<label>Current account</label>
+<client>2</client>
+</account>>
+<account>
+<label>Savings account</label>
+<client>2</client>
+</account>
+<account>
+<label>Current account</label>
+<client>3</client>
+</account>>
+<account>
+<label>Savings account</label>
+<client>3</client>
+</account>
+</accounts>

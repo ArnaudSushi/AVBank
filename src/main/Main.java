@@ -1,5 +1,7 @@
 package main;
 
+import java.io.File;
+import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -7,14 +9,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.function.Predicate;
-import com.github.cliftonlabs.json_simple.*;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import component.Account;
 import component.Client;
 import component.Credit;
@@ -34,13 +43,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		Main.clients = Main.loadClient(3);
-		Main.accounts = Main.loadAccounts();
+		// Main.accounts = Main.loadAccounts();
+		Main.accounts = Main.loadAccountsFromXML();
 		Main.accountTable = Main.loadAccountTable();
 		//Main.flows = Main.loadFlows();
-		Main.flows = Main.loadFlowsFromJson();
-		// Init Flows
-		Main.printClients();
-		Main.printAccounts();
+		Main.flows = Main.loadFlowsFromJson(); // Init Flows
+		Main.printClients(); Main.printAccounts();
 		Main.executeFlows(flows, accountTable);
 	}
 
@@ -96,7 +104,7 @@ public class Main {
 		Collections.sort(l, new Comparator<Map.Entry<?, Account>>() {
 
 			public int compare(Map.Entry<?, Account> o1, Map.Entry<?, Account> o2) {
-				return (int)o1.getValue().compareByBalanceTo(o2.getValue());
+				return (int) o1.getValue().compareByBalanceTo(o2.getValue());
 			}
 		});
 
@@ -147,20 +155,87 @@ public class Main {
 		Main.checkBelowZeroAccounts();
 		Main.printAccountTable();
 	}
-	
+
 	public static void checkBelowZeroAccounts() {
 		Predicate<Account> belowZero = t -> t.getBalance() < 0;
 		Main.accounts.stream().filter(belowZero).forEach(belowZeroAccount -> {
-			System.out.println("Warning! Account n° " + belowZeroAccount.getAccountNumber() + "'s balance is below Zero!");
+			System.out.println(
+					"Warning! Account n° " + belowZeroAccount.getAccountNumber() + "'s balance is below Zero!");
 		});
 	}
-	
-	//2.1 JSON file of flows
+
+	// 2.1 JSON file of flows
 	public static Collection<Flow> loadFlowsFromJson() {
-		Path jsonPath = Paths.get("./../ressource/flows.json");
-		Json
 		ArrayList<Flow> flows = new ArrayList<Flow>();
-		
+		JSONParser parser = new JSONParser();
+		Path jsonPath = Paths.get(new File("").getAbsolutePath() + "/ressource/flows.json");
+		try {
+			JSONObject jsonObj = (JSONObject) parser.parse(new FileReader(jsonPath.toFile()));
+			JSONArray jsonArray = (JSONArray) jsonObj.get("flows");
+			Iterator iterator = jsonArray.iterator();
+			while (iterator.hasNext()) {
+				JSONObject flow = (JSONObject) iterator.next();
+
+				int id = Integer.parseInt(flow.get("id").toString());
+				double amount = (double) flow.get("amount");
+				int targetAccountNumber = Integer.parseInt(flow.get("targetAccountNumber").toString());
+				LocalDate date = LocalDate.parse(flow.get("date").toString());
+
+				switch ((String) flow.get("comment")) {
+				case "Debit":
+					flows.add(new Debit("Debit", id, amount, targetAccountNumber, false, date));
+					break;
+				case "Credit":
+					flows.add(new Credit("Credit", id, amount, targetAccountNumber, false, date));
+					break;
+				case "Transfert":
+					int issuingAccountNumber = Integer.parseInt(flow.get("issuingAccountNumber").toString());
+					flows.add(new Transfert("Transfert", id, amount, targetAccountNumber, false, date,
+							issuingAccountNumber));
+					break;
+				default:
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(flows.get(0));
 		return flows;
+	}
+
+	// 2.2 XML file of account
+	public static Collection<Account> loadAccountsFromXML() {
+		ArrayList<Account> accounts = new ArrayList<Account>();
+		Path xmlPath = Paths.get(new File("").getAbsolutePath() + "/ressource/accounts.xml");
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		try {
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse(xmlPath.toFile());
+
+			NodeList list = doc.getElementsByTagName("account");
+			
+			for (int temp = 0; temp < list.getLength(); temp++) {
+				Node node = list.item(temp);
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) node;
+					String label = element.getElementsByTagName("label").item(0).getTextContent();
+					int clientId = Integer.parseInt(element.getElementsByTagName("client").item(0).getTextContent());
+					Client client = Main.clients.stream().filter(t -> t.getClientId() == clientId).iterator().next();
+					switch (label) {
+					case "Current account" :
+						accounts.add(new CurrentAccount(label, client));
+						break;
+					case "Savings account" :
+						accounts.add(new SavingsAccount(label, client));
+					default:
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return accounts;
 	}
 }
