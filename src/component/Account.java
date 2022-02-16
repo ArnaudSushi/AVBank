@@ -71,7 +71,7 @@ public abstract class Account {
 	}
 	
 	public String toString() {
-		return ("Account n°" + String.valueOf(this.accountNumber)
+		return ("Account nÂ°" + String.valueOf(this.accountNumber)
 				+ ", "+ this.label
 				+ ", balance : " + String.valueOf(this.balance)
 				+ ", client : " + this.client);

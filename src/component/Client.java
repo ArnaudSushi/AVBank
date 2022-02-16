@@ -47,6 +47,6 @@ public class Client {
 	}
 	
 	public String toString() {
-		return ("Client N°" + this.clientId + " : " + this.name + " " + this.firstName + ".");
+		return ("Client NÂ°" + this.clientId + " : " + this.name + " " + this.firstName + ".");
 	}
 }

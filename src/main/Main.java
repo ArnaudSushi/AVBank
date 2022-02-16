@@ -160,7 +160,7 @@ public class Main {
 		Predicate<Account> belowZero = t -> t.getBalance() < 0;
 		Main.accounts.stream().filter(belowZero).forEach(belowZeroAccount -> {
 			System.out.println(
-					"Warning! Account n° " + belowZeroAccount.getAccountNumber() + "'s balance is below Zero!");
+					"Warning! Account nÂ° " + belowZeroAccount.getAccountNumber() + "'s balance is below Zero!");
 		});
 	}
 
